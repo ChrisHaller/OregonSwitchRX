@@ -11,7 +11,8 @@ The Oregon-RCSwitch processes the following data using an ESP01, NodeMCU (ESP826
 
 ## Configuration
 
-Depending on the hardware connected, the constants must be set accordingly in main.cpp. The mqtt-broker must be configured in Settings.h.
+Depending on the hardware connected, the constants must be set accordingly in main.cpp. The mqtt-broker must be configured in Settings.h.  
+OregonSwitchRX provides a very simple web interface that allows you to adjust the MQTT configuration at a later time.
 
 ## Switching on and off light sources
 

@@ -151,7 +151,7 @@ unsigned long lastMicrosValueReceived;
 
 Settings settings;
 
-// Wird bei jedem Interrupt gerufen. Schreibt die Anzahl ms, welche seit dem letzten Interrupt bergangen sind, nach "pulse"
+// Wird bei jedem Interrupt gerufen. Schreibt die Anzahl ms, welche seit dem letzten Interrupt vergangen sind, nach "pulse"
  IRAM_ATTR void RxInterruptHandler(void)
 {
   oregonDecoder.SetPulse();
@@ -190,7 +190,7 @@ boolean isValidUnsignedInteger(String str)
 }
 
 
-// mqtt-message smpfangen
+// mqtt-message empfangen
 // Bsp: tele/rx4/GPIO/5  payload=1
 void mqttCallback(char* topic, byte* payload, unsigned int length) 
 {
@@ -220,7 +220,7 @@ void mqttCallback(char* topic, byte* payload, unsigned int length)
     if(strTopic.length() >= topicInGPIO.length())
     {
       // Beginn des Topics entfernen
-      // Bsp: aus "tele/rx4/GPIO/5" wird "5" (weil "tele/rx4/GPIO" entfernt wird)
+      // Bsp: aus "tele/rx4/GPIO/5" wird "5"
       String subTopic = strTopic.substring(topicInGPIO.length() - 1);
 #ifdef SERIAL_DEBUG
       Serial.println("Subtopic: " + subTopic);
@@ -780,10 +780,10 @@ void HandleBME680()
       return;
     }
 
-    // Der BME680 liefert imme reine zu hohe Temperatur. Deshalb muss sie korrigiert werden.
+    // Der BME680 liefert in meinem Fall eine zu hohe Temperatur. Deshalb wird sie hier korrigiert. Es könnte sein, dass das Problem mit einem anderen Sensor nicht auftritt. In diesem Fall könnte man die Korrektur hier entfernen.
     float realTemperature = bme.temperature - 2.8;
 
-    // auf eine Dezimalstelle abrunded
+    // auf eine Dezimalstelle abrunden
     float roundedTemperature = static_cast<float>(static_cast<int>(realTemperature * 10.)) / 10.;
     PublishOregonData(topicOutOregon.c_str(), 99, 52, roundedTemperature, bme.humidity, NULL, true, bme.pressure / 100.0, bme.gas_resistance / 1000.0);
   }
