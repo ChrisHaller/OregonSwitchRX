@@ -15,7 +15,7 @@ ESP8266WebServer webServer(80);
 #include <WebServer.h>
 WebServer webServer(80);
 #else
-#error "This ain't a ESP8266 or ESP32, dumbo!"
+#error "This is neither ESP8266 or ESP32. Please check your build environment settings."
 #endif
 
 
@@ -42,7 +42,7 @@ WebServer webServer(80);
 //#define BME680_SENSOR
 //#define MCP9808_SENSOR
 
-String RXId = "rx20_buero_test1";
+String RXId = "rx1_garden_one";   // ID of this receiver. It will be used in MQTT topics and as hostname in the wifi network. You should change it to a unique value for each receiver you have. It is recommended to use only letters and numbers, no special characters or spaces, because the RXId will be used in MQTT topics and as hostname in the wifi network.
 
 
 
@@ -116,7 +116,7 @@ Adafruit_MCP9808 tempsensor = Adafruit_MCP9808();
 /*  in private.h
 const int NUM_SIDS = 5;
 const char* ssids [NUM_SIDS]
-        = { "MW6-IoT", "MW6", "MW6-Keller",  };
+        = { "SSID1", "SSID2", "SSID3",  };
 
 const char* wlanPasswords [NUM_SIDS]
         = { "**", "**", "**", "**", "**" };
@@ -151,8 +151,9 @@ unsigned long lastMicrosValueReceived;
 
 Settings settings;
 
-// Wird bei jedem Interrupt gerufen. Schreibt die Anzahl ms, welche seit dem letzten Interrupt vergangen sind, nach "pulse"
- IRAM_ATTR void RxInterruptHandler(void)
+
+// will be called on every interrupt. It writes the number of ms since the last interrupt to "pulse" 
+IRAM_ATTR void RxInterruptHandler(void)
 {
   oregonDecoder.SetPulse();
   RCSwitch::handleInterrupt();
@@ -190,7 +191,7 @@ boolean isValidUnsignedInteger(String str)
 }
 
 
-// mqtt-message empfangen
+// receive mqtt-message
 // Bsp: tele/rx4/GPIO/5  payload=1
 void mqttCallback(char* topic, byte* payload, unsigned int length) 
 {
@@ -464,7 +465,7 @@ void HandleDHT()
     // Check if any reads failed and exit early (to try again).
     if (!isnan(humidity) || !isnan(temperature)) 
     {
-      // Daten an mQQT Broker gesenden (wie wenn es Daten einem Oregon Sensor währen)
+      // Daten an MQQT Broker gesenden
       PublishOregonData(topicOutOregon.c_str(), 99, 51, temperature, humidity, NULL, true);
     }
     else
