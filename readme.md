@@ -1,4 +1,4 @@
-# Oregon-RCSwitch RX 433Mhz
+# IoT - Oregon-RCSwitch RX 433Mhz
 
 The Oregon-RCSwitch processes the following data using an ESP01, NodeMCU (ESP8266), or ESP32:
 
